@@ -3,33 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment Form</title>
+    <title>Secure Payment Form</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
     <div class="container mt-5">
-        <div class="card">
-            <div class="card-header">
-                <h4 class="mb-0">Payment form example</h4>
+        <div class="card shadow-lg">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Secure Payment Form</h4>
             </div>
             <div class="card-body">
-                <div class="alert alert-danger" role="alert">
-                    Some fields are missing
+                <div id="error-message" class="alert alert-danger d-none" role="alert">
+                    ⚠ Some fields are missing or incorrect. Please check and try again.
                 </div>
-                <form>
+                
+                <form id="payment-form">
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <label class="form-label">Card #</label>
-                            <input type="text" class="form-control" placeholder="XXXXXXXXXXXXXXXX" pattern="\d{16}" required>
+                            <label class="form-label">Card Number</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-credit-card"></i></span>
+                                <input type="text" class="form-control" placeholder="XXXX XXXX XXXX XXXX" pattern="\d{16}" required>
+                            </div>
                         </div>
                         <div class="col-md-3">
-                            <label class="form-label">CVC #</label>
-                            <input type="text" class="form-control" placeholder="000" pattern="\d{3,4}" required>
+                            <label class="form-label">CVC</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                <input type="text" class="form-control" placeholder="123" pattern="\d{3,4}" required>
+                            </div>
                         </div>
                         <div class="col-md-3">
                             <label class="form-label">Amount</label>
-                            <input type="number" class="form-control" placeholder="$ Amount" required>
+                            <input type="number" class="form-control" placeholder="$ Amount" min="1" required>
                         </div>
                     </div>
                     
@@ -52,7 +60,7 @@
                         <div class="col-md-3">
                             <label class="form-label">State</label>
                             <select class="form-select" required>
-                                <option value="">Pick a state</option>
+                                <option value="">Select a state</option>
                                 <option value="CA">California</option>
                                 <option value="NY">New York</option>
                                 <option value="TX">Texas</option>
@@ -68,22 +76,22 @@
     
                     <div class="mb-3">
                         <label class="form-label">We accept:</label>
-                        <div class="d-flex gap-2">
+                        <div class="d-flex gap-3">
                             <label class="payment-option">
                                 <input type="radio" name="payment-method" value="visa" required>
-                                <img src="https://cdn.jsdelivr.net/npm/bootstrap-icons/icons/credit-card-2-front.svg" alt="Visa" width="40" height="30">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png" alt="Visa" width="50">
                             </label>
                             <label class="payment-option">
                                 <input type="radio" name="payment-method" value="mastercard">
-                                <img src="https://cdn.jsdelivr.net/npm/bootstrap-icons/icons/credit-card.svg" alt="Mastercard" width="40" height="30">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/b/b7/MasterCard_Logo.svg" alt="Mastercard" width="50">
                             </label>
                             <label class="payment-option">
                                 <input type="radio" name="payment-method" value="amex">
-                                <img src="https://cdn.jsdelivr.net/npm/bootstrap-icons/icons/credit-card-fill.svg" alt="American Express" width="40" height="30">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/3/30/American_Express_logo.svg" alt="Amex" width="50">
                             </label>
                             <label class="payment-option">
                                 <input type="radio" name="payment-method" value="discover">
-                                <img src="https://cdn.jsdelivr.net/npm/bootstrap-icons/icons/card-heading.svg" alt="Discover" width="40" height="30">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/0/0c/Discover_Card_logo.svg" alt="Discover" width="50">
                             </label>
                         </div>
                     </div>
@@ -95,11 +103,35 @@
     
                     <div class="d-flex justify-content-end">
                         <button type="button" class="btn btn-secondary me-2">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Send</button>
+                        <button type="submit" class="btn btn-success">Submit Payment</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+
+    <script>
+        document.getElementById("payment-form").addEventListener("submit", function(event) {
+            event.preventDefault(); // Evitar envío por defecto
+            
+            let inputs = document.querySelectorAll("input, select, textarea");
+            let isValid = true;
+            
+            inputs.forEach(input => {
+                if (!input.checkValidity()) {
+                    isValid = false;
+                }
+            });
+
+            let errorMessage = document.getElementById("error-message");
+            if (!isValid) {
+                errorMessage.classList.remove("d-none");
+            } else {
+                errorMessage.classList.add("d-none");
+                alert("Payment submitted successfully!");
+                this.reset(); // Limpiar el formulario
+            }
+        });
+    </script>
 </body>
 </html>
